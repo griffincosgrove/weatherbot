@@ -23,4 +23,15 @@ forecast = darksky.get_forecast(
     exclude=[weather.MINUTELY, weather.ALERTS] # default `[]`
 )
 
+forecast.latitude
+forecast.longitude
+forecast.timezone # timezone for coordinates. For exmaple: `America/New_York`
+
+print('today: ' + forecast.currently.summary)
+print(forecast.hourly.summary)
+print('it is: ' + str(forecast.currently.temperature) + ' degrees')
+print('it feels like: ' + str(forecast.currently.apparent_temperature) + ' degrees')
+
+
+# figure out how to print forecast.daily.data
 # add logic to send to email.
