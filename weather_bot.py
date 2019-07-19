@@ -5,7 +5,7 @@ from darksky.types import languages, units, weather
 import datetime
 import smtplib as smp
 
-API_KEY = 'your key' #replace with your API key from darksky developers
+API_KEY = 'your key'  # replace with your API key from darksky developers
 
 darksky = DarkSky(API_KEY)
 
