@@ -3,8 +3,9 @@
 from darksky.api import DarkSky, DarkSkyAsync
 from darksky.types import languages, units, weather
 import datetime
+import smtplib as smp
 
-API_KEY = '984f861bb9c84baa5744eb667835b824'
+API_KEY = 'your key' #replace with your API key from darksky developers
 
 darksky = DarkSky(API_KEY)
 
@@ -18,10 +19,10 @@ longitude = -77.293022
 
 forecast = darksky.get_forecast(
     latitude, longitude,
-    extend=False, # default `False`
-    lang=languages.ENGLISH, # default `ENGLISH`
-    units=units.AUTO, # default `auto`
-    exclude=[weather.MINUTELY, weather.ALERTS] # default `[]`
+    extend=False,
+    lang=languages.ENGLISH,
+    units=units.AUTO,
+    exclude=[weather.MINUTELY, weather.ALERTS]
 )
 
 forecast.latitude
@@ -29,6 +30,7 @@ forecast.longitude
 forecast.timezone
 
 
+# this method builds the string for the daily weather report.
 def daily_forecast():
     daily_summary = ''
     for item in forecast.daily.data:
@@ -36,7 +38,7 @@ def daily_forecast():
                          (str(item.apparent_temperature_high)))
         daily_summary += (' at ' + str(item.temperature_high_time.strftime("%I %p")))
         daily_summary += '\n'
-        daily_summary += ('Low is ' + str(item.temperature_low) +  " but it will feel like " +
+        daily_summary += ('Low is ' + str(item.temperature_low) + " but it will feel like " +
                           (str(item.apparent_temperature_low)))
         daily_summary += ' at ' + str(item.temperature_low_time.strftime("%I %p"))
         daily_summary += '\n'
@@ -46,6 +48,10 @@ def daily_forecast():
     return daily_summary
 
 
-daily_forecast()
+# email logic. plugin your credentials in the place holder
 
-# add logic to send to email.
+smtp_obj = smp.SMTP('smtp.gmail.com', 587)
+smtp_obj.starttls()
+smtp_obj.login('user@gmail.com', 'password')
+smtp_obj.sendmail('me@gmail.com', 'recipient@gmail.com', 'Subject: Weather. \n' + daily_forecast())
+smtp_obj.quit()
